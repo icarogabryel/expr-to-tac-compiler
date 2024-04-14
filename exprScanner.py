@@ -15,7 +15,6 @@ class Scanner:
             if token[0] == 'EOF':
                 break
 
-    
     def getNextToken(self):
             while self.getCurrentChar() is not None:
                 if self.getCurrentChar().isspace():
