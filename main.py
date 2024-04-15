@@ -1,4 +1,5 @@
 from exprScanner import Scanner
+from exprParser import Parser
 
 def main():
     with open('input.txt', 'r') as file:
@@ -6,6 +7,9 @@ def main():
 
     scanner = Scanner(text)
 
-    print(scanner.getTokenSteam())
+    parser = Parser(scanner.getTokenSteam())
+
+    n = parser.getAst()
+    print(n)
 
 if __name__ == '__main__': main()

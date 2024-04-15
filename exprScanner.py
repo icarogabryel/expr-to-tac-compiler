@@ -10,10 +10,12 @@ class Scanner:
     def makeTokenStream(self):
         while True:
             token = self.getNextToken()
-            self.tokenStream.append(token)
 
             if token[0] == 'EOF':
+                self.tokenStream.append(token)
                 break
+
+            self.tokenStream.append(token)
 
     def getNextToken(self):
             while self.getCurrentChar() is not None:

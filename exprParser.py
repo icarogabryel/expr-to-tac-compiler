@@ -3,84 +3,125 @@ class Node:
         self.token = token
         self.sons = []
 
-    def addSon(self, node):
+    def getNodeToken(self):
+        return self.token
+    
+    def isEmpty(self):
+        if self.token[0] == 'empty':
+            return True
+        else:
+            return False
+    
+    def __repr__(self) -> str:
+        return  f'{self.token}:{self.sons}'
+
+    def addSonAtR(self, node):
         self.sons.append(node)
+
+    def addSonAtL(self, node):
+        self.sons = [node] + self.sons
     
 class Parser:
     def __init__(self, tokenStream) -> None:
         self.tokenStream = tokenStream
         self.index = -1
-
+        self.ast = None
+        
         self.parse()
 
+    def getAst(self):
+        return self.ast
+    
     def getCurrentToken(self):
         return self.tokenStream[self.index]
     
     def peekNextToken(self):
-        return self.tokenStream[self.index + 1]
+        if self.index < len(self.tokenStream) - 1:
+            return self.tokenStream[self.index + 1]
     
     def getNextToken(self):
         self.index +=1
         return self.tokenStream[self.index]
 
-    def matchToken(self, expectedToken):
-        if tokenRecived := self.getNextToken[0] != expectedToken:
+    def matchNextToken(self, expectedToken):
+        tokenRecived = self.getNextToken()[0]
+
+        if tokenRecived != expectedToken:
             raise Exception(f'Sintax Error: {expectedToken} expected. Instead, {tokenRecived} recived.')
-        else:
-            return tokenRecived
     
     def parse(self):
-        self.init()
+        self.ast = self.term()
+
+    def expr(self):
+        sonNode = self.term()
+        node = self.exprDash()
+        
+        if node.isEmpty():
+            return sonNode
+        else:
+            node.addSonAtL(sonNode)
+            return node
+        
+    def exprDash(self):
+        tempIndex = self.index
+        try:
+            token = self.matchNextToken('plus')
+            node = Node(token)
+
+            node.addSonAtR(self.term())
+
+            sonNode = self.term()
+            if not sonNode.isEmpty():
+                node.addSonAtR(sonNode())
     
-    def init(): # todo: chage to first
-        pass
+        except:
+            self.index = tempIndex
+            node = Node(('empty', None))
+        
+        return node
+
+    def term(self):
+        factorNode = self.factor()
+        termDashNode = self.termDash()
+
+        if termDashNode.isEmpty():
+            node = factorNode
+        else:
+            termDashNode.addSonAtL(factorNode)
+            node = termDashNode
+
+        return node
+
+    def termDash(self):
+        if self.peekNextToken()[0] == 'times':
+            self.matchNextToken('times')
+            node = Node(self.getCurrentToken())
+
+            factorNode = self.factor()
+            termDashNode = self.termDash()
+
+            if termDashNode.isEmpty():
+                node.addSonAtR(factorNode)
+            
+            else:
+                termDashNode.addSonAtL(factorNode)
+                node.addSonAtR(termDashNode)
+
+        else:
+            node = Node(('empty', None))
+
+        return node
 
     def factor(self):
-        if self.peekNextToken[0] == 'lParen':
-            self.matchToken('lParen')
+        if self.peekNextToken() == 'lParen':
+            self.matchNextToken('lParen')
             node = self.expr()
-            self.matchToken('rParen')
-
+            self.matchNextToken('rParen')
+            
             return node
 
         else:
-            token = self.matchToken('number')
-            node = Node(token)
-
-            return node
-
-    def term(self):
-        try:
-            sonNode1 = self.term()
-
-            token = self.matchToken('times')
-            node = Node(token)
-
-            node.addSon(sonNode1)
-
-            sonNode2 = self.factor()
-            node.addSon(sonNode2)
-
-            return node
-        
-        except:
-            node = self.factor()
-            return node
-
-    def expr(self):
-        try:
-            sonNode1 = self.expr()
-
-            token = self.matchToken('plus')
-            node = Node(token)
-
-            node.addSon(sonNode1)
-
-            sonNode2 = self.term()
-            node.addSon(sonNode2)
-
-            return node
-        
-        except:
-            node = self.term()
+            self.matchNextToken('number')
+            node = Node(self.getCurrentToken())
+            
             return node
