@@ -44,40 +44,44 @@ class Parser:
         return self.tokenStream[self.index]
 
     def matchNextToken(self, expectedToken):
-        tokenRecived = self.getNextToken()[0]
+        tokenReceived = self.getNextToken()[0]
 
-        if tokenRecived != expectedToken:
-            raise Exception(f'Sintax Error: {expectedToken} expected. Instead, {tokenRecived} recived.')
+        if tokenReceived != expectedToken:
+            raise Exception(f'Syntax Error: {expectedToken} expected. Instead, {tokenReceived} received.')
     
     def parse(self):
-        self.ast = self.term()
+        self.ast = self.expr()
 
     def expr(self):
-        sonNode = self.term()
-        node = self.exprDash()
-        
-        if node.isEmpty():
-            return sonNode
+        termNode = self.term()
+        exprDashNode = self.exprDash()
+
+        if exprDashNode.isEmpty():
+            node = termNode
         else:
-            node.addSonAtL(sonNode)
-            return node
+            exprDashNode.addSonAtL(termNode)
+            node = exprDashNode
+
+        return node
         
     def exprDash(self):
-        tempIndex = self.index
-        try:
-            token = self.matchNextToken('plus')
-            node = Node(token)
+        if self.peekNextToken()[0] == 'plus':
+            self.matchNextToken('plus')
+            node = Node(self.getCurrentToken())
 
-            node.addSonAtR(self.term())
+            termNode = self.term()
+            exprDashNode = self.exprDash()
 
-            sonNode = self.term()
-            if not sonNode.isEmpty():
-                node.addSonAtR(sonNode())
-    
-        except:
-            self.index = tempIndex
+            if exprDashNode.isEmpty():
+                node.addSonAtR(termNode)
+            
+            else:
+                exprDashNode.addSonAtL(termNode)
+                node.addSonAtR(exprDashNode)
+
+        else:
             node = Node(('empty', None))
-        
+
         return node
 
     def term(self):
@@ -113,7 +117,7 @@ class Parser:
         return node
 
     def factor(self):
-        if self.peekNextToken() == 'lParen':
+        if self.peekNextToken()[0] == 'lParen':
             self.matchNextToken('lParen')
             node = self.expr()
             self.matchNextToken('rParen')
