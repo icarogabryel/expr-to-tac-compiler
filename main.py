@@ -4,12 +4,15 @@ from exprCompiler import Compiler
 
 def main():
     with open('input.txt', 'r') as file:
-        text = file.read()
+        inText = file.read()
 
-    scanner = Scanner(text)
+    scanner = Scanner(inText)
     parser = Parser(scanner.getTokenSteam())
     compiler = Compiler(parser.getAst())
+
+    outText = compiler.getCompCode()
     
-    print(compiler.getCompCode())
+    with open('output.txt', 'w') as file:
+        file.write(outText)
 
 if __name__ == '__main__': main()
