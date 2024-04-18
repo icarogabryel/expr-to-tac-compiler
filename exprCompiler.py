@@ -16,7 +16,10 @@ class Compiler:
                 self.varNumber += 1
                 return f't{self.varNumber}\nt{self.varNumber} = {self.getCompCode(node.children[0])} + {self.getCompCode(node.children[1])}'
             case 'times':
-                self.varNumber += 1
+                
+                parameter1 = self.getCompCode(node.children[0])
+                parameter2 = self.getCompCode(node.children[1])
+                
                 return f't{self.varNumber}\nt{self.varNumber} = {self.getCompCode(node.children[0])} * {self.getCompCode(node.children[1])}'
             
 # n1 = Node(('number', '6'))
