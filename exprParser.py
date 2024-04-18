@@ -3,6 +3,9 @@ class Node:
         self.token = token
         self.sons = []
 
+    def __repr__(self) -> str:
+        return  f'{self.token}:{self.sons}'
+    
     def getNodeToken(self):
         return self.token
     
@@ -11,9 +14,6 @@ class Node:
             return True
         else:
             return False
-    
-    def __repr__(self) -> str:
-        return  f'{self.token}:{self.sons}'
 
     def addSonAtR(self, node):
         self.sons.append(node)
@@ -52,7 +52,7 @@ class Parser:
     def parse(self):
         self.ast = self.expr()
 
-    def expr(self):
+    def expr(self) -> Node:
         termNode = self.term()
         exprDashNode = self.exprDash()
 
@@ -64,7 +64,7 @@ class Parser:
 
         return node
         
-    def exprDash(self):
+    def exprDash(self) -> Node:
         if self.peekNextToken()[0] == 'plus':
             self.matchNextToken('plus')
             node = Node(self.getCurrentToken())
@@ -84,7 +84,7 @@ class Parser:
 
         return node
 
-    def term(self):
+    def term(self) -> Node:
         factorNode = self.factor()
         termDashNode = self.termDash()
 
@@ -96,7 +96,7 @@ class Parser:
 
         return node
 
-    def termDash(self):
+    def termDash(self) -> Node:
         if self.peekNextToken()[0] == 'times':
             self.matchNextToken('times')
             node = Node(self.getCurrentToken())
@@ -116,7 +116,7 @@ class Parser:
 
         return node
 
-    def factor(self):
+    def factor(self) -> Node:
         if self.peekNextToken()[0] == 'lParen':
             self.matchNextToken('lParen')
             node = self.expr()

@@ -3,35 +3,36 @@ from exprParser import Node
 class Compiler:
     def __init__(self, node: Node):
         self.varNumber = -1
-        self.x = self.getCompCode(node)
+        self.symbolTable = {}
+        self.getCompCode
+        self.compCode = ''
 
-    def getCode(self):
-        return self.x
+        self.makeCompCode(node)
+        self.compCode = self.compCode[1:] + '\n'
+ 
+    def getCompCode(self):
+        return self.compCode
 
-    def getCompCode(self, node):
-        match(node.token[0]):
+    def makeCompCode(self, node: Node):
+        match(node.getNodeToken()[0]):
             case 'number':
                 return int(node.token[1])
+            
             case 'plus':
                 self.varNumber += 1
-                return f't{self.varNumber}\nt{self.varNumber} = {self.getCompCode(node.children[0])} + {self.getCompCode(node.children[1])}'
-            case 'times':
-                
-                parameter1 = self.getCompCode(node.children[0])
-                parameter2 = self.getCompCode(node.children[1])
-                
-                return f't{self.varNumber}\nt{self.varNumber} = {self.getCompCode(node.children[0])} * {self.getCompCode(node.children[1])}'
+                var = f't{self.varNumber}'
+
+                temCompCode = '\n' + f'{var} = {self.makeCompCode(node.sons[0])} + {self.makeCompCode(node.sons[1])}'
+                self.compCode += temCompCode
+
+                return var
             
-# n1 = Node(('number', '6'))
-# n2 = Node(('number', '5'))
-# n3 = Node(('number', '4'))
+            case 'times':
+                self.varNumber += 1
+                var = f't{self.varNumber}'
 
-# n4 = Node(('plus', '+'))
-# n5 = Node(('times', '*'))
-
-# n5.children = [n2, n1]
-# n4.children = [n3, n5]
-
-# a = Compiler(n4)
-
-# print(a.getCode())
+                temCompCode = '\n' + f'{var} = {self.makeCompCode(node.sons[0])} * {self.makeCompCode(node.sons[1])}'
+                self.compCode += temCompCode
+                
+                return var
+ 
