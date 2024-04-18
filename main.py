@@ -15,4 +15,6 @@ def main():
     with open('output.txt', 'w') as file:
         file.write(outText)
 
+    print('Compilation successful!')
+
 if __name__ == '__main__': main()
