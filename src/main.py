@@ -1,9 +1,17 @@
+import sys
+
 from exprScanner import Scanner
 from exprParser import Parser
 from exprCompiler import Compiler
 
 def main():
-    with open('input.txt', 'r') as file:
+    args = sys.argv[1:]
+    
+    if len(args) != 2:
+        print('Usage: python main.py [input_file] [output_file]')
+        return
+    
+    with open(args[0], 'r') as file:
         exprText = file.read()
 
     scanner = Scanner(exprText)
@@ -11,7 +19,7 @@ def main():
     compiler = Compiler(parser.getAst())
     tacText = compiler.getCompCode()
     
-    with open('output.txt', 'w') as file:
+    with open(args[1], 'w') as file:
         file.write(tacText)
 
     print('Compilation successful!')

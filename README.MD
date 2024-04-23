@@ -1,6 +1,6 @@
 # Expression to TAC Compiler
 
-This is a simple expression to TAC compiler written in Python. It takes an expression as input and generates the three address code for the expression.
+This is a simple expression to TAC compiler written in Python. It takes an expression as input and generates the quadruple representation of the three address code for the expression.
 
 This compiler have its structure divided into three parts:
 1. Scanner: The scanner reads the input expression, makes lexical analysis and generates the token stream for the expression.
@@ -23,12 +23,10 @@ Factor -> (Expr) | number
 
 To run the compiler, you need to have Python installed on your system. You can download Python from [here](https://www.python.org/downloads/).
 
-After installing Python, you can run the compiler by:
-1. Putting a 'input.txt' file  in the same directory as the 'main.py' file.
-2. running the following command in the terminal:
+After installing Python, you can run the compiler by running the following command in the terminal:
 
 ```
-python main.py
+python main.py [input_file] [output_file]
 ```
 
 The compiler will read the expression from the 'input.txt' file and generate the TAC in the 'output.txt' file.
