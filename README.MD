@@ -29,7 +29,7 @@ After installing Python, you can run the compiler by running the following comma
 python main.py [input_file] [output_file]
 ```
 
-The compiler will read the expression from the 'input.txt' file and generate the TAC in the 'output.txt' file.
+The compiler will read the expression from the `[input_file]` file and generate the TAC in the `[output_file]` file.
 
 ## Example
 
