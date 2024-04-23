@@ -4,16 +4,15 @@ from exprCompiler import Compiler
 
 def main():
     with open('input.txt', 'r') as file:
-        inText = file.read()
+        exprText = file.read()
 
-    scanner = Scanner(inText)
+    scanner = Scanner(exprText)
     parser = Parser(scanner.getTokenSteam())
     compiler = Compiler(parser.getAst())
-
-    outText = compiler.getCompCode()
+    tacText = compiler.getCompCode()
     
     with open('output.txt', 'w') as file:
-        file.write(outText)
+        file.write(tacText)
 
     print('Compilation successful!')
 

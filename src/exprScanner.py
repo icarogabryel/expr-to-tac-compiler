@@ -18,33 +18,33 @@ class Scanner:
             self.tokenStream.append(token)
 
     def getNextToken(self):
-            while self.getCurrentChar() is not None:
-                if self.getCurrentChar().isspace():
-                    self.skipWhiteSpace()
-                    continue
+        while self.getCurrentChar() is not None:
+            if self.getCurrentChar().isspace():
+                self.skipWhiteSpace()
+                continue
 
-                if self.getCurrentChar().isdigit():
-                    return ('number',self.interger())
-                
-                if self.getCurrentChar() == '+':
-                    self.advance()
-                    return ('plus', '+')
-                
-                if self.getCurrentChar() == '*':
-                    self.advance()
-                    return ('times', '*')
-                
-                if self.getCurrentChar() == '(':
-                    self.advance()
-                    return ('lParen', '(')
-                
-                if self.getCurrentChar() == ')':
-                    self.advance()
-                    return ('rParen', ')')
-                
-                raise Exception('Invalid char')   
+            if self.getCurrentChar().isdigit():
+                return ('number', self.integer())
+            
+            if self.getCurrentChar() == '+':
+                self.advance()
+                return ('plus', '+')
+            
+            if self.getCurrentChar() == '*':
+                self.advance()
+                return ('times', '*')
+            
+            if self.getCurrentChar() == '(':
+                self.advance()
+                return ('lParen', '(')
+            
+            if self.getCurrentChar() == ')':
+                self.advance()
+                return ('rParen', ')')
+            
+            raise Exception('Invalid char')
 
-            return ('EOF', None)
+        return ('EOF', None)
 
     def getCurrentChar(self):
           return self.text[self.index] if self.index < len(self.text) else None
@@ -53,7 +53,7 @@ class Scanner:
          while self.getCurrentChar() is not None and self.getCurrentChar().isspace():
               self.advance()
 
-    def interger(self):
+    def integer(self):
         result = ''
 
         while self.getCurrentChar() is not None and self.getCurrentChar().isdigit():
